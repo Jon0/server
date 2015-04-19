@@ -1,6 +1,6 @@
 #include "command.h"
 
-std::string Test::exec(std::string cmd) {
+std::string CommandLine::exec(std::string cmd) {
 
 	FILE* pipe = popen(cmd.c_str(), "r");
 	if (!pipe) return "ERROR";

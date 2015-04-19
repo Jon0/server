@@ -2,6 +2,7 @@
 
 #include <boost/asio.hpp>
 
+#include "system/system.h"
 #include "server.h"
 
 int main(int argc, char* argv[]) {
@@ -10,6 +11,8 @@ int main(int argc, char* argv[]) {
 			std::cerr << "Usage: server <port>\n";
 			return 1;
 		}
+
+		sys::System::create();
 
 		boost::asio::io_service io_service;
 

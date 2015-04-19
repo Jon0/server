@@ -16,7 +16,6 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
-#include "command.h"
 #include "parser.h"
 
 namespace io {
@@ -102,7 +101,7 @@ private:
 	/**
 	 * write a string with an http header to socket
 	 */
-	void write_string(const std::string &str);
+	void write_string(const std::string &str, const std::string &type);
 
 	/**
 	 * write a file with an http header to socket, using the requested filename
@@ -171,8 +170,6 @@ private:
 	char data [max_length];
 
 	std::chrono::time_point<std::chrono::system_clock> start_time;
-
-	Test t;
 };
 
 } // namespace io

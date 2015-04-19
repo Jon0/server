@@ -24,6 +24,7 @@ set(CPP_PATH "src")
 
 file(GLOB SRC_FILES
 	"${CPP_PATH}/*.cpp"
+	"${CPP_PATH}/system/*.cpp"
 )
 
 add_definitions(-std=c++11)

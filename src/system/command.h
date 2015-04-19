@@ -3,9 +3,9 @@
 
 #include <string>
 
-class Test {
+class CommandLine {
 public:
-	Test() {}
+	CommandLine() {}
 
 	std::string exec(std::string);
 

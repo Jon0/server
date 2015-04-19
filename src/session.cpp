@@ -1,3 +1,4 @@
+#include "system/system.h"
 #include "server.h"
 #include "session.h"
 
@@ -57,8 +58,13 @@ void session::do_read() {
 			if (!ec) {
 				std::cout << "session id: " << id << " -> ";
 				auto request = parse_request(data, length);
-				if (request.location == "/off") {
-					t.exec("shutdown -P 0");
+				if (request.location == "/") {
+					auto sys = sys::System::get();
+					write_string(sys->html(), "text/html");
+				}
+				else if (request.location == "/off") {
+					auto sys = sys::System::get();
+					sys->get_power_ctrl()->shutdown();
 				}
 				else if (request.location == "/stream") {
 
@@ -69,7 +75,7 @@ void session::do_read() {
 				else if (request.location == "/status") {
 
 					// write status page
-					write_string(this->create_server.status());
+					write_string(this->create_server.status(), "text/plain");
 				}
 				else if (request.type == http::request_type::http_get) {
 
@@ -82,7 +88,7 @@ void session::do_read() {
 					if (create_server.get_update_function()) {
 						create_server.get_update_function()(request.data);
 					}
-					write_string("wot m8");
+					write_string("wot m8", "text/plain");
 				}
 
 				// read next request in same session
@@ -98,10 +104,10 @@ void session::do_read() {
 		});
 }
 
-void session::write_string(const std::string &str) {
+void session::write_string(const std::string &str, const std::string &type) {
 	std::string header = "";
 	header += "HTTP/1.1 200 OK" + newline;
-	header += "Content-Type: text/plain" + newline;
+	header += "Content-Type: " + type + newline;
 	header += "Cache-Control: no-cache" + newline;
 	header += "Content-Length: " + std::to_string(str.size()) + newline;
 	header += newline;
