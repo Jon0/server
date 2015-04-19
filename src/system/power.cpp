@@ -64,5 +64,6 @@ int PowerCtrl::idle_shutdown_seconds() {
 }
 
 void PowerCtrl::shutdown() {
+	cl.exec("ethtool -s eth1 wol g");
 	cl.exec("shutdown -P 0");
 }
