@@ -54,9 +54,11 @@ void PowerCtrl::update() {
 
 	// look for x activity too
 	auto xidle = cl.exec("xprintidle");
-	int sum_time = stoi(xidle) / 1000;
-	if (sum_time < new_idle_time) {
-		new_idle_time = sum_time;
+	if (isdigit(xidle[0])) {
+		int sum_time = stoi(xidle) / 1000;
+		if (sum_time < new_idle_time) {
+			new_idle_time = sum_time;
+		}
 	}
 
 	idle_sec = new_idle_time;
