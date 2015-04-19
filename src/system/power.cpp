@@ -20,7 +20,7 @@ void PowerCtrl::update() {
 	int new_idle_time = sec_since_start;
 
 	// parse the lines from w
-	for (int i = 25; i < lines.size(); ++i) {
+	for (int i = 2; i < lines.size(); ++i) {
 		auto tokens = io::split(lines[i], ' ');
 		auto idle_str = tokens[4];
 		auto last_char = idle_str[idle_str.length() - 1];
@@ -41,10 +41,15 @@ void PowerCtrl::update() {
 			std::cout << time_parts[0] << " min " << time_parts[1] << " sec " << std::endl;
 		}
 
+		// record for each user
+		activity[tokens[0]] = sum_time;
+
 		// find lowest value
 		if (sum_time < new_idle_time) {
 			new_idle_time = sum_time;
 		}
+
+
 	}
 
 	idle_sec = new_idle_time;
@@ -61,6 +66,19 @@ int PowerCtrl::idle_seconds() {
 
 int PowerCtrl::idle_shutdown_seconds() {
 	return idle_shutdown_sec;
+}
+
+std::string PowerCtrl::html() {
+	std::string result;
+	result += "<table>";
+	result += "<tr>";
+	for (auto u: activity) {
+		result += "<td>"+u.first+"</td>";
+		result += "<td>"+std::to_string(u.second)+"</td>";
+	}
+	result += "</tr>";
+	result += "</table>";
+	return result;
 }
 
 void PowerCtrl::shutdown() {

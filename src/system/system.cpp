@@ -33,7 +33,8 @@ std::string System::html() {
 	str += "<body>";
 	str += "<h1>system idle time "+idle_time_str+"</h1>";
 	str += "<h1>shutdown in "+remain_str+"</h1>";
-	str += "<a href=\"/off\">turn off</a>";
+	str += "<a href=\"/off\">turn off now</a>";
+	str += pwr.html();
 	str += "</body>";
 	str += "</html>";
 	return str;
