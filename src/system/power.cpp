@@ -52,6 +52,13 @@ void PowerCtrl::update() {
 
 	}
 
+	// look for x activity too
+	auto xidle = cl.exec("xprintidle");
+	int sum_time = stoi(xidle) / 1000;
+	if (sum_time < new_idle_time) {
+		new_idle_time = sum_time;
+	}
+
 	idle_sec = new_idle_time;
 	std::cout << "idle for " << idle_sec << " sec" << std::endl;
 	if (idle_sec > idle_shutdown_sec) {

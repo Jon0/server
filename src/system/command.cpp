@@ -1,5 +1,11 @@
 #include "command.h"
 
+bool CommandLine::has_command(const std::string &cmd_name) {
+	auto r = exec("which "+cmd_name);
+	return r.length() > 0;
+}
+
+
 std::string CommandLine::exec(std::string cmd) {
 
 	FILE* pipe = popen(cmd.c_str(), "r");
