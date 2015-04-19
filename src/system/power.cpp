@@ -6,20 +6,24 @@
 
 PowerCtrl::PowerCtrl() {
 	idle_sec = 0;
-	idle_shutdown_sec = 5 * 60;
+	idle_shutdown_sec = 15 * 60;
+	start = std::chrono::system_clock::now();
 }
 
 void PowerCtrl::update() {
+
+	// sec since startup is the maximum run time
+	int sec_since_start = (std::chrono::system_clock::now() - start).count();
 	auto w_out = cl.exec("w");
 	auto lines = io::split(w_out, '\n');
-	int new_idle_time = idle_sec + 60;
+	int new_idle_time = sec_since_start;
 
 	// parse the lines from w
 	for (int i = 2; i < lines.size(); ++i) {
 		auto tokens = io::split(lines[i], ' ');
 		auto idle_str = tokens[4];
 		auto last_char = idle_str[idle_str.length() - 1];
-		int sum_time = 1000000;
+		int sum_time = sec_since_start;
 		if (last_char == 'm') {
 			auto time_parts = io::split(idle_str.substr(0, idle_str.length() - 1), ':');
 			sum_time = stoi(time_parts[0]) * 60 * 60 + stoi(time_parts[1]) * 60;

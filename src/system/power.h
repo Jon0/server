@@ -18,6 +18,7 @@ public:
 	void shutdown();
 
 private:
+	std::chrono::time_point<std::chrono::system_clock> start;
 	int idle_shutdown_sec;
 	int idle_sec;
 
