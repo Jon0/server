@@ -65,7 +65,7 @@ void session::do_read() {
 				else if (request.location == "/off") {
 					auto sys = sys::System::get();
 					sys->get_power_ctrl()->shutdown();
-					write_string("system shutdown in 1 minute", "text/plain");
+					write_string("system shut down now", "text/plain");
 				}
 				else if (request.location == "/stream") {
 

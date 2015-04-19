@@ -50,7 +50,7 @@ void PowerCtrl::update() {
 	idle_sec = new_idle_time;
 	std::cout << "idle for " << idle_sec << " sec" << std::endl;
 	if (idle_sec > idle_shutdown_sec) {
-		std::cout << "system shuting down in 1 minute" << std::endl;
+		std::cout << "system shuting down now" << std::endl;
 		shutdown();
 	}
 }
