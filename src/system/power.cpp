@@ -56,6 +56,7 @@ void PowerCtrl::update() {
 	auto xidle = cl.exec("xprintidle");
 	if (isdigit(xidle[0])) {
 		int sum_time = stoi(xidle) / 1000;
+		activity["x"] = sum_time;
 		if (sum_time < new_idle_time) {
 			new_idle_time = sum_time;
 		}
@@ -79,6 +80,7 @@ int PowerCtrl::idle_shutdown_seconds() {
 
 std::string PowerCtrl::html() {
 	std::string result;
+	result += "<p>active users</p>";
 	result += "<table>";
 	result += "<tr>";
 	for (auto u: activity) {
