@@ -53,5 +53,5 @@ int PowerCtrl::idle_shutdown_seconds() {
 }
 
 void PowerCtrl::shutdown() {
-	cl.exec("shutdown -P +1");
+	cl.exec("shutdown -P 0");
 }
