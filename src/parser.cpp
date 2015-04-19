@@ -9,11 +9,13 @@ namespace io {
 std::vector<std::string> split(const std::string &str, char delim) {
 	std::vector<std::string> result;
 	std::stringstream ss(str);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        result.push_back(item);
-    }
-    return result;
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		if (item.length() > 0) {
+			result.push_back(item);
+		}
+	}
+	return result;
 }
 
 http::request parse_request(const char *request_data, int length) {

@@ -20,7 +20,7 @@ PowerCtrl *System::get_power_ctrl() {
 }
 
 std::string System::html() {
-	int idle_time = (int)(pwr.idle_seconds().count() / 60);
+	int idle_time = pwr.idle_seconds() / 60;
 	std::string idle_time_str = std::to_string(idle_time) + " minutes";
 	std::string remain_str = std::to_string(120 - idle_time) + " minutes";
 	std::string str;
@@ -36,6 +36,24 @@ std::string System::html() {
 	str += "</body>";
 	str += "</html>";
 	return str;
+}
+
+System::System()
+	:
+	run(true) {
+
+	// start update thread
+	update_thread = std::thread([this] {
+		while (run) {
+			pwr.update();
+			std::this_thread::sleep_for(std::chrono::seconds(10));
+		}
+	});
+}
+
+System::~System() {
+	run = false;
+	update_thread.join();
 }
 
 }

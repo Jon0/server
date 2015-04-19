@@ -10,16 +10,17 @@ class PowerCtrl {
 public:
 	PowerCtrl();
 
-	std::chrono::duration<double> idle_seconds();
+	void update();
+
+	int idle_seconds();
 
 	void shutdown();
 
 private:
+	int idle_shutdown_sec;
+	int idle_sec;
 
 	CommandLine cl;
-
-	// start time
-	std::chrono::time_point<std::chrono::system_clock> start;
 
 };
 
