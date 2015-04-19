@@ -5,7 +5,7 @@
 #include "power.h"
 
 PowerCtrl::PowerCtrl() {
-	idle_sec = 1000000;
+	idle_sec = 0;
 	idle_shutdown_sec = 5 * 60;
 }
 
@@ -38,7 +38,7 @@ void PowerCtrl::update() {
 	}
 
 	idle_sec = new_idle_time;
-	if (idle_sec < idle_shutdown_sec) {
+	if (idle_sec > idle_shutdown_sec) {
 		std::cout << "system shuting down in 1 minute" << std::endl;
 		shutdown();
 	}
