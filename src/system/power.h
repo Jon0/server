@@ -13,6 +13,7 @@ public:
 	void update();
 
 	int idle_seconds();
+	int idle_shutdown_seconds();
 
 	void shutdown();
 

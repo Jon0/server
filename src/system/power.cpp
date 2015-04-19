@@ -48,6 +48,10 @@ int PowerCtrl::idle_seconds() {
 	return idle_sec;
 }
 
+int PowerCtrl::idle_shutdown_seconds() {
+	return idle_shutdown_sec;
+}
+
 void PowerCtrl::shutdown() {
 	cl.exec("shutdown -P +1");
 }

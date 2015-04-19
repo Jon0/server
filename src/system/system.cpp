@@ -21,8 +21,9 @@ PowerCtrl *System::get_power_ctrl() {
 
 std::string System::html() {
 	int idle_time = pwr.idle_seconds() / 60;
+	int shutdown_time = pwr.idle_shutdown_seconds() / 60;
 	std::string idle_time_str = std::to_string(idle_time) + " minutes";
-	std::string remain_str = std::to_string(120 - idle_time) + " minutes";
+	std::string remain_str = std::to_string(shutdown_time - idle_time) + " minutes";
 	std::string str;
 	str += "<!DOCTYPE html>";
 	str += "<html>";
