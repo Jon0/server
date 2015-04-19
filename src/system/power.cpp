@@ -13,13 +13,14 @@ PowerCtrl::PowerCtrl() {
 void PowerCtrl::update() {
 
 	// sec since startup is the maximum run time
-	int sec_since_start = (std::chrono::system_clock::now() - start).count();
+	std::chrono::duration<double> dur = std::chrono::system_clock::now() - start;
+	int sec_since_start = dur.count();
 	auto w_out = cl.exec("w");
 	auto lines = io::split(w_out, '\n');
 	int new_idle_time = sec_since_start;
 
 	// parse the lines from w
-	for (int i = 2; i < lines.size(); ++i) {
+	for (int i = 25; i < lines.size(); ++i) {
 		auto tokens = io::split(lines[i], ' ');
 		auto idle_str = tokens[4];
 		auto last_char = idle_str[idle_str.length() - 1];
