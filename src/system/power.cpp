@@ -5,7 +5,7 @@
 #include "power.h"
 
 PowerCtrl::PowerCtrl() {
-	idle_sec = 0;
+	idle_sec = 1000000;
 	idle_shutdown_sec = 5 * 60;
 }
 
