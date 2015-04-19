@@ -6,7 +6,6 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
-#include "command.h"
 #include "session.h"
 
 namespace io {
@@ -81,8 +80,6 @@ public:
 	std::string status();
 
 private:
-
-	Test t;
 
 	/*
 	 * non-blocking function to accept new connections

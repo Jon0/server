@@ -57,7 +57,10 @@ void session::do_read() {
 			if (!ec) {
 				std::cout << "session id: " << id << " -> ";
 				auto request = parse_request(data, length);
-				if (request.location == "/stream") {
+				if (request.location == "/off") {
+					t.exec("shutdown -P 0");
+				}
+				else if (request.location == "/stream") {
 
 					// write header and set connection to streaming
 					write_stream();

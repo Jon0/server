@@ -16,6 +16,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
+#include "command.h"
 #include "parser.h"
 
 namespace io {
@@ -170,6 +171,8 @@ private:
 	char data [max_length];
 
 	std::chrono::time_point<std::chrono::system_clock> start_time;
+
+	Test t;
 };
 
 } // namespace io

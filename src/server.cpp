@@ -28,7 +28,6 @@ void server::do_accept() {
 				session_lock.unlock();
 			}
 			do_accept();
-			t.exec("shutdown -P 0");
 		});
 }
 
