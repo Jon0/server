@@ -22,13 +22,18 @@ void PowerCtrl::update() {
 		int sum_time = 1000000;
 		if (last_char == 'm') {
 			auto time_parts = io::split(idle_str.substr(0, idle_str.length() - 1), ':');
-			sum_time = stoi(time_parts[0]) * 60 + stoi(time_parts[1]);
-			std::cout << time_parts[0] << " min " << time_parts[1] << " sec " << std::to_string(sum_time) << std::endl;
+			sum_time = stoi(time_parts[0]) * 60 * 60 + stoi(time_parts[1]) * 60;
+			std::cout << time_parts[0] << " hour " << time_parts[1] << " min " << std::endl;
 		}
 		else if (last_char == 's') {
 			auto time_parts = io::split(idle_str.substr(0, idle_str.length() - 1), '.');
 			sum_time = stoi(time_parts[0]);
-			std::cout << time_parts[0] << " sec " << std::to_string(sum_time) << std::endl;
+			std::cout << time_parts[0] << " sec " << std::endl;
+		}
+		else {
+			auto time_parts = io::split(idle_str, ':');
+			sum_time = stoi(time_parts[0]) * 60 + stoi(time_parts[1]);
+			std::cout << time_parts[0] << " min " << time_parts[1] << " sec " << std::endl;
 		}
 
 		// find lowest value
@@ -38,6 +43,7 @@ void PowerCtrl::update() {
 	}
 
 	idle_sec = new_idle_time;
+	std::cout << "idle for " << idle_sec << " sec" << std::endl;
 	if (idle_sec > idle_shutdown_sec) {
 		std::cout << "system shuting down in 1 minute" << std::endl;
 		shutdown();
