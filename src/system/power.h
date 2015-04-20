@@ -21,6 +21,12 @@ public:
 	int idle_seconds();
 	int idle_shutdown_seconds();
 
+
+	/**
+	 * change idle seconds required for shutdown
+	 */
+	void set_idle_seconds(int s);
+
 	std::string html();
 
 	/**

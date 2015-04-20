@@ -1,3 +1,4 @@
+#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -9,7 +10,12 @@ namespace sys {
 
 PowerCtrl::PowerCtrl() {
 	idle_sec = 0;
-	idle_shutdown_sec = 15 * 60;
+
+	// read config
+	std::ifstream config ("../server/content/config.txt");
+	if (config.is_open()) {
+		config >> idle_shutdown_sec;
+	}
 	start = std::chrono::system_clock::now();
 }
 
@@ -59,7 +65,7 @@ void PowerCtrl::update() {
 	auto xidle = cl.exec("xprintidle");
 	if (isdigit(xidle[0])) {
 		int sum_time = stoi(xidle) / 1000;
-		activity["x"] = sum_time;
+		activity["xwindow"] = sum_time;
 		if (sum_time < new_idle_time) {
 			new_idle_time = sum_time;
 		}
@@ -86,17 +92,36 @@ int PowerCtrl::idle_shutdown_seconds() {
 	return idle_shutdown_sec;
 }
 
+void PowerCtrl::set_idle_seconds(int s) {
+	idle_shutdown_sec = s;
+
+	// update config
+	std::ofstream config ("../server/content/config.txt");
+	if (config.is_open()) {
+		config << std::to_string(idle_shutdown_sec) + "\n";
+	}
+}
+
 std::string PowerCtrl::html() {
 	std::string result;
-	result += "<p>active users</p>";
 	result += "<table>";
 	result += "<tr>";
+	result += "<td>active users</td>";
+	result += "<td>idle time</td>";
+	result += "</tr>";
+	
 	for (auto u: activity) {
+		result += "<tr>";
 		result += "<td>"+u.first+"</td>";
 		result += "<td>"+std::to_string(u.second)+"</td>";
+		result += "</tr>";
 	}
-	result += "</tr>";
 	result += "</table>";
+	result += "<h1>Change idle shutdown minutes</h1>";
+	result += "<form action=\"idletime\">";
+	result += "<input type=\"text\" name=\"minutes\">";
+	result += "<input type=\"submit\" value=\"Set\">";
+	result += "</form>";
 	return result;
 }
 

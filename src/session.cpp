@@ -62,6 +62,12 @@ void session::do_read() {
 					auto sys = sys::System::get();
 					write_string(sys->html(), "text/html");
 				}
+				if (request.location == "/idletime") {
+					int new_sec = stoi(request.data["minutes"]) * 60;
+					auto sys = sys::System::get();
+					sys->get_power_ctrl()->set_idle_seconds(new_sec);
+					write_string("shutdown time set to "+std::to_string(new_sec), "text/plain");
+				}
 				else if (request.location == "/off") {
 					auto sys = sys::System::get();
 					sys->get_power_ctrl()->shutdown();

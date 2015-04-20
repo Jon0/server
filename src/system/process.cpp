@@ -31,12 +31,7 @@ int SambaMonitor::active_sessions() {
 std::string SambaMonitor::html() {
 	std::string result;
 	result += "<h1>";
-	if (active) {
-		result += "samba active";
-	}
-	else {
-		result += "samba idle";
-	}
+	result += std::to_string(active) + " samba connections";
 	result += "</h1>";
 	return result;
 }

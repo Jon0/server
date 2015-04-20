@@ -37,7 +37,9 @@ std::string System::html() {
 	str += "<body>";
 	str += "<h1>system idle time "+idle_time_str+"</h1>";
 	str += "<h1>shutdown in "+remain_str+"</h1>";
-	str += "<a href=\"/off\">turn off now</a>";
+	str += "<form action=\"off\">";
+	str += "<input type=\"submit\" value=\"Turn off now\">";
+	str += "</form>";
 	str += "<br>";
 	str += pwr.html();
 	str += "<br>";

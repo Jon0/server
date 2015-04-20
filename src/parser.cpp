@@ -41,9 +41,20 @@ http::request parse_request(const char *request_data, int length) {
 		else {
 			// read http header
 			auto items = split(line, ' ');
+
+			// if line starts with an http verb
 			if (items.size() > 1 && http::request_str.count(items[0]) > 0) {
 				type = http::request_str.at(items[0]);
-				location = items[1];
+				auto components = split(items[1], '?');
+				location = components[0];
+
+				// parse url arguments
+				if (items.size() > 1) {
+					auto key_value = split(components[1], '=');
+					if (key_value.size() >= 2) {
+						data[key_value[0]] = key_value[1];
+					}
+				}
 				std::cout << items[0] << " request for " << location << std::endl;
 			}
 			else if (items.size() == 1) {
