@@ -19,6 +19,10 @@ PowerCtrl *System::get_power_ctrl() {
 	return &pwr;
 }
 
+SambaMonitor *System::get_samba() {
+	return &smb;
+}
+
 std::string System::html() {
 	int idle_time = pwr.idle_seconds() / 60;
 	int shutdown_time = pwr.idle_shutdown_seconds() / 60;
@@ -36,6 +40,8 @@ std::string System::html() {
 	str += "<a href=\"/off\">turn off now</a>";
 	str += "<br>";
 	str += pwr.html();
+	str += "<br>";
+	str += smb.html();
 	str += "</body>";
 	str += "</html>";
 	return str;
@@ -49,6 +55,7 @@ System::System()
 	update_thread = std::thread([this] {
 		while (run) {
 			pwr.update();
+			smb.update();
 			std::this_thread::sleep_for(std::chrono::seconds(10));
 		}
 	});

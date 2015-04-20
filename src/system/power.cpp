@@ -3,6 +3,9 @@
 
 #include "../parser.h"
 #include "power.h"
+#include "system.h"
+
+namespace sys {
 
 PowerCtrl::PowerCtrl() {
 	idle_sec = 0;
@@ -62,6 +65,11 @@ void PowerCtrl::update() {
 		}
 	}
 
+	// check samba
+	if (System::get()->get_samba()->active_sessions()) {
+		new_idle_time = 0;
+	}
+
 	idle_sec = new_idle_time;
 	std::cout << "idle for " << idle_sec << " sec" << std::endl;
 	if (idle_sec > idle_shutdown_sec) {
@@ -96,3 +104,5 @@ void PowerCtrl::shutdown() {
 	cl.exec("ethtool -s eth1 wol g");
 	cl.exec("shutdown -P 0");
 }
+
+} // namespace sys

@@ -7,6 +7,8 @@
 
 #include "command.h"
 
+namespace sys {
+
 class PowerCtrl {
 public:
 	PowerCtrl();
@@ -36,5 +38,7 @@ private:
 	CommandLine cl;
 
 };
+
+} // namespace sys
 
 #endif

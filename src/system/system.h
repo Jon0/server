@@ -4,6 +4,7 @@
 #include <thread>
 
 #include "power.h"
+#include "process.h"
 
 namespace sys {
 
@@ -14,6 +15,7 @@ public:
 	static System *get();
 
 	PowerCtrl *get_power_ctrl();
+	SambaMonitor *get_samba();
 
 	/**
 	 * generate an html status page
@@ -28,6 +30,7 @@ private:
 	std::thread update_thread;
 
 	PowerCtrl pwr;
+	SambaMonitor smb;
 
 	static System *instance;
 };
