@@ -12,7 +12,7 @@ PowerCtrl::PowerCtrl() {
 	idle_sec = 0;
 
 	// read config
-	std::ifstream config ("../server/content/config.txt");
+	std::ifstream config ("config.txt");
 	if (config.is_open()) {
 		config >> idle_shutdown_sec;
 	}
@@ -96,7 +96,7 @@ void PowerCtrl::set_idle_seconds(int s) {
 	idle_shutdown_sec = s;
 
 	// update config
-	std::ofstream config ("../server/content/config.txt");
+	std::ofstream config ("config.txt");
 	if (config.is_open()) {
 		config << std::to_string(idle_shutdown_sec) + "\n";
 	}

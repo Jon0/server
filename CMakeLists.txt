@@ -30,3 +30,6 @@ file(GLOB SRC_FILES
 add_definitions(-std=c++11)
 add_executable (ServerMain ${SRC_FILES})
 target_link_libraries (ServerMain ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+
+# copy config file
+file( COPY "${PROJECT_SOURCE_DIR}/content/config.txt" DESTINATION "${PROJECT_BINARY_DIR}/")
