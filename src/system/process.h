@@ -9,12 +9,12 @@ public:
 
 	void update();
 
-	bool active_sessions();
+	int active_sessions();
 
 	std::string html();
 
 private:
-	bool active;
+	int active;
 
 };
 

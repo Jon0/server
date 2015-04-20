@@ -66,7 +66,7 @@ void PowerCtrl::update() {
 	}
 
 	// check samba
-	if (System::get()->get_samba()->active_sessions()) {
+	if (System::get()->get_samba()->active_sessions() > 0) {
 		new_idle_time = 0;
 	}
 
