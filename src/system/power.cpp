@@ -16,6 +16,12 @@ PowerCtrl::PowerCtrl() {
 	if (config.is_open()) {
 		config >> idle_shutdown_sec;
 	}
+
+	// set a minimum when starting
+	if (idle_shutdown_sec < 120) {
+		idle_shutdown_sec = 120;
+	}
+	std::cout << "idle time = " << idle_shutdown_sec << " sec" << std::endl;
 	start = std::chrono::system_clock::now();
 }
 
