@@ -35,6 +35,7 @@ public:
 	void shutdown();
 
 private:
+	std::string config_file_path;
 	std::chrono::time_point<std::chrono::system_clock> start;
 	int idle_shutdown_sec;
 	int idle_sec;

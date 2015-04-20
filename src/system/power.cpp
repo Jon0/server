@@ -9,17 +9,21 @@
 namespace sys {
 
 PowerCtrl::PowerCtrl() {
+	config_file_path = "/etc/web_pw.conf";
 	idle_sec = 0;
 
 	// read config
-	std::ifstream config ("config.txt");
+	std::ifstream config(config_file_path);
 	if (config.is_open()) {
 		config >> idle_shutdown_sec;
 	}
+	else {
+		idle_shutdown_sec = 1500;
+	}
 
 	// set a minimum when starting
-	if (idle_shutdown_sec < 120) {
-		idle_shutdown_sec = 120;
+	if (idle_shutdown_sec < 300) {
+		idle_shutdown_sec = 300;
 	}
 	std::cout << "idle time = " << idle_shutdown_sec << " sec" << std::endl;
 	start = std::chrono::system_clock::now();
@@ -102,7 +106,7 @@ void PowerCtrl::set_idle_seconds(int s) {
 	idle_shutdown_sec = s;
 
 	// update config
-	std::ofstream config ("config.txt");
+	std::ofstream config (config_file_path);
 	if (config.is_open()) {
 		config << std::to_string(idle_shutdown_sec) + "\n";
 	}
