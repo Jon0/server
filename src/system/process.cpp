@@ -16,8 +16,8 @@ void SambaMonitor::update() {
 	auto smbstatus = cl.exec("smbstatus");
 	auto lines = io::split(smbstatus, '\n');
 	
-	std::cout << lines[2] << std::endl;
-	active = !(lines[2].length() == 0);
+	std::cout << lines[3] << std::endl;
+	active = !(lines[3].length() == 0);
 }
 
 bool SambaMonitor::active_sessions() {
