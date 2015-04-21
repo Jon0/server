@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 			std::cerr << "Usage: server <port>\n";
 			return 1;
 		}
-		sys::LogFile::init("log.txt");
+		sys::LogFile::init("/etc/web-log.txt");
 		sys::System::create();
 
 		boost::asio::io_service io_service;
