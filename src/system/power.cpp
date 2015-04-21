@@ -1,31 +1,15 @@
-#include <fstream>
 #include <iostream>
 #include <vector>
 
 #include "../parser.h"
+#include "log.h"
 #include "power.h"
 #include "system.h"
 
 namespace sys {
 
 PowerCtrl::PowerCtrl() {
-	config_file_path = "/etc/web_pw.conf";
 	idle_sec = 0;
-
-	// read config
-	std::ifstream config(config_file_path);
-	if (config.is_open()) {
-		config >> idle_shutdown_sec;
-	}
-	else {
-		idle_shutdown_sec = 1500;
-	}
-
-	// set a minimum when starting
-	if (idle_shutdown_sec < 300) {
-		idle_shutdown_sec = 300;
-	}
-	std::cout << "idle time = " << idle_shutdown_sec << " sec" << std::endl;
 	start = std::chrono::system_clock::now();
 }
 
@@ -47,17 +31,17 @@ void PowerCtrl::update() {
 		if (last_char == 'm') {
 			auto time_parts = io::split(idle_str.substr(0, idle_str.length() - 1), ':');
 			sum_time = stoi(time_parts[0]) * 60 * 60 + stoi(time_parts[1]) * 60;
-			std::cout << time_parts[0] << " hour " << time_parts[1] << " min " << std::endl;
+			//std::cout << time_parts[0] << " hour " << time_parts[1] << " min " << std::endl;
 		}
 		else if (last_char == 's') {
 			auto time_parts = io::split(idle_str.substr(0, idle_str.length() - 1), '.');
 			sum_time = stoi(time_parts[0]);
-			std::cout << time_parts[0] << " sec " << std::endl;
+			//std::cout << time_parts[0] << " sec " << std::endl;
 		}
 		else {
 			auto time_parts = io::split(idle_str, ':');
 			sum_time = stoi(time_parts[0]) * 60 + stoi(time_parts[1]);
-			std::cout << time_parts[0] << " min " << time_parts[1] << " sec " << std::endl;
+			//std::cout << time_parts[0] << " min " << time_parts[1] << " sec " << std::endl;
 		}
 
 		// record for each user
@@ -87,9 +71,8 @@ void PowerCtrl::update() {
 	}
 
 	idle_sec = new_idle_time;
-	std::cout << "idle for " << idle_sec << " sec" << std::endl;
-	if (idle_sec > idle_shutdown_sec) {
-		std::cout << "system shuting down now" << std::endl;
+	if (idle_sec > idle_shutdown_seconds()) {
+		log() << "system shuting down now\n";
 		shutdown();
 	}
 }
@@ -99,17 +82,16 @@ int PowerCtrl::idle_seconds() {
 }
 
 int PowerCtrl::idle_shutdown_seconds() {
+	auto str_sec = System::get()->get_config()->get("idle_timer_sec");
+	int idle_shutdown_sec = io::parse_int(str_sec);
+	if (idle_shutdown_sec < 300) {
+		idle_shutdown_sec = 300;
+	}
 	return idle_shutdown_sec;
 }
 
 void PowerCtrl::set_idle_seconds(int s) {
-	idle_shutdown_sec = s;
-
-	// update config
-	std::ofstream config (config_file_path);
-	if (config.is_open()) {
-		config << std::to_string(idle_shutdown_sec) + "\n";
-	}
+	System::get()->get_config()->set("idle_timer_sec", std::to_string(s));
 }
 
 std::string PowerCtrl::html() {

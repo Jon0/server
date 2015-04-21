@@ -3,6 +3,7 @@
 
 #include <thread>
 
+#include "config.h"
 #include "power.h"
 #include "process.h"
 
@@ -14,6 +15,7 @@ public:
 	static void create();
 	static System *get();
 
+	Config *get_config();
 	PowerCtrl *get_power_ctrl();
 	SambaMonitor *get_samba();
 
@@ -26,11 +28,15 @@ private:
 	System();
 	~System();
 
-	bool run;
-	std::thread update_thread;
+	// initialise config
+	Config conf;
 
 	PowerCtrl pwr;
 	SambaMonitor smb;
+
+	// update thread control
+	bool run;
+	std::thread update_thread;
 
 	static System *instance;
 };

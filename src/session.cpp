@@ -19,8 +19,8 @@ session::session(server &s,
 session::~session() {}
 
 void session::end() {
-	std::cout << "end session with " << socket().remote_endpoint().address().to_string() 
-			<< " (id: " << id << ")" << std::endl;
+	sys::log() << "end session with " << socket().remote_endpoint().address().to_string() 
+			<< " (id: " << id << ")\n";
 
 	// clear list of messages to write
 	this->queue_lock.lock();
@@ -34,7 +34,7 @@ void session::end() {
 		this->write_thread.join();
 	}
 	catch (...) {
-		std::cout << "error joining thread" << std::endl;
+		sys::log() << "Error joining write thread\n";
 	}
 
 	// close socket and shutdown
@@ -56,7 +56,7 @@ void session::do_read() {
 	socket_.async_read_some(boost::asio::buffer(data, max_length),
 		[this](boost::system::error_code ec, std::size_t length) {
 			if (!ec) {
-				std::cout << "session id: " << id << " -> ";
+				sys::log() << "session id: " << id << " -> ";
 				auto request = parse_request(data, length);
 				if (request.location == "/") {
 					auto sys = sys::System::get();
@@ -97,16 +97,17 @@ void session::do_read() {
 					}
 					write_string("wot m8", "text/plain");
 				}
+				sys::log() << "Page delivered\n";
 
 				// read next request in same session
 				do_read();
 			}
 			else if (ec != boost::asio::error::operation_aborted) {
-				std::cout << "connection closed" << " (id: " << id << ")" << std::endl;
+				sys::log() << "Connection closed" << " (id: " << id << ")\n";
 				this->end();
 			}
 			else {
-				std::cout << "operation aborted" << std::endl;
+				sys::log() << "Operation aborted\n";
 			}
 		});
 }

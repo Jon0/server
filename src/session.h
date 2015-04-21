@@ -16,6 +16,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
+#include "system/log.h"
 #include "parser.h"
 
 namespace io {
@@ -67,8 +68,8 @@ public:
 		}
 
 		start_time = std::chrono::high_resolution_clock::now();
-		std::cout << "start session with " << socket().remote_endpoint().address().to_string() 
-					<< " (id: " << id << ")" << std::endl;
+		sys::log() << "start session with " << socket().remote_endpoint().address().to_string() 
+					<< " (id: " << id << ")\n";
 
 		this->state = session_state::idle;
 		start_write_thread();

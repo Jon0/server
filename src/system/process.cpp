@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 
 #include "../parser.h"
@@ -18,7 +17,7 @@ void SambaMonitor::update() {
 	
 	int as = 0;
 	for (int i = 3; lines[i].substr(0, 7) != "Service"; ++i) {
-		std::cout << "Session: " << lines[i] << std::endl;
+		//std::cout << "Session: " << lines[i] << std::endl;
 		as++;
 	}
 	active = as;

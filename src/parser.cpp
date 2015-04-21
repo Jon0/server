@@ -2,9 +2,21 @@
 #include <sstream>
 #include <vector>
 
+#include "system/log.h"
 #include "parser.h"
 
 namespace io {
+
+int parse_int(const std::string &str, int default_value) {
+	int result = default_value;
+	try {
+		result = stoi(str);
+	}
+	catch (...) {
+		sys::log() << "Error parsing \"" << str << "\" as int\n";
+	}
+	return result;
+}	
 
 std::vector<std::string> split(const std::string &str, char delim) {
 	std::vector<std::string> result;
@@ -55,7 +67,7 @@ http::request parse_request(const char *request_data, int length) {
 						data[key_value[0]] = key_value[1];
 					}
 				}
-				std::cout << items[0] << " request for " << location << std::endl;
+				sys::log() << items[0] << " request for " << location << "\n";
 			}
 			else if (items.size() == 1) {
 				// end of http header

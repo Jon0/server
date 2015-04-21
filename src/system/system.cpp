@@ -1,3 +1,4 @@
+#include "log.h"
 #include "system.h"
 
 namespace sys {
@@ -8,11 +9,16 @@ void System::create() {
 	if (instance) {
 		return;
 	}
+	log() << "Starting system monitor\n";
 	instance = new System();
 }
 
 System *System::get() {
 	return instance;
+}
+
+Config *System::get_config() {
+	return &conf;
 }
 
 PowerCtrl *System::get_power_ctrl() {

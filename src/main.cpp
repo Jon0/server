@@ -2,6 +2,7 @@
 
 #include <boost/asio.hpp>
 
+#include "system/log.h"
 #include "system/system.h"
 #include "server.h"
 
@@ -11,7 +12,7 @@ int main(int argc, char* argv[]) {
 			std::cerr << "Usage: server <port>\n";
 			return 1;
 		}
-
+		sys::LogFile::init("log.txt");
 		sys::System::create();
 
 		boost::asio::io_service io_service;
@@ -22,6 +23,9 @@ int main(int argc, char* argv[]) {
 
 		// todo: use multiple run threads
 		io_service.run(); // blocks until exit
+
+		sys::log() << "Closing log file\n";
+		sys::LogFile::close();
 	}
 	catch (std::exception& e) {
 		std::cerr << "Exception: " << e.what() << "\n";
