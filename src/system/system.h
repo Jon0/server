@@ -34,6 +34,8 @@ private:
 	PowerCtrl pwr;
 	SambaMonitor smb;
 
+	std::string dir;
+
 	// update thread control
 	bool run;
 	std::thread update_thread;

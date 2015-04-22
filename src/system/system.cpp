@@ -38,7 +38,7 @@ std::string System::html() {
 	str += "<!DOCTYPE html>";
 	str += "<html>";
 	str += "<head>";
-	str += "<title>test</title>";
+	str += "<title>power</title>";
 	str += "</head>";
 	str += "<body>";
 	str += "<h1>system idle time "+idle_time_str+"</h1>";
@@ -50,6 +50,8 @@ std::string System::html() {
 	str += pwr.html();
 	str += "<br>";
 	str += smb.html();
+	str += "<br>";
+	str += "<h2>"+dir+"</h2>";
 	str += "</body>";
 	str += "</html>";
 	return str;
@@ -58,6 +60,9 @@ std::string System::html() {
 System::System()
 	:
 	run(true) {
+
+	CommandLine cl;
+	dir = cl.exec("pwd");
 
 	// start update thread
 	update_thread = std::thread([this] {
