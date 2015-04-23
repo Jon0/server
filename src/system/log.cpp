@@ -22,13 +22,13 @@ void LogFile::close() {
 
 LogFile::LogFile(std::string path)
 	:
-	logpath(path),
-	log_stream(path + time_str()) {
+	logpath(path + time_str()),
+	log_stream(logpath) {
 
 	// try reopen
 	while (!log_stream.is_open()) {
 		std::this_thread::sleep_for(std::chrono::seconds(10));
-		log_stream.open(logpath + time_str(), std::ios_base::out);
+		log_stream.open(logpath , std::ios_base::out);
 	}
 	*this << "Started at " << time_str();
 }
@@ -42,7 +42,9 @@ std::ofstream &LogFile::stream() {
 std::string LogFile::time_str() {
 	auto now = std::chrono::system_clock::now();
 	auto now_c = std::chrono::system_clock::to_time_t(now);
-	return std::ctime(&now_c);
+	char buff [100];
+	strftime (buff, 100, "%Y_%m_%d_%H_%M_%S", localtime(&now_c));
+	return std::string(buff);
 }
 
 std::string LogFile::log_path() const {
