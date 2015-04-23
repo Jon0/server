@@ -16,6 +16,7 @@ void LogFile::init(std::string path) {
 
 void LogFile::close() {
 	delete instance;
+	instance = nullptr;
 }
 
 LogFile::LogFile(std::string path)
