@@ -1,5 +1,6 @@
 #include <chrono>
 #include <ctime>
+#include <thread>
 
 #include "log.h"
 
@@ -8,10 +9,10 @@ namespace sys {
 LogFile *LogFile::instance = nullptr;
 
 void LogFile::init(std::string path) {
-	 if (instance) {
-	 	return;
-	 }
-	 instance = new LogFile(path);
+	if (instance) {
+		return;
+	}
+	instance = new LogFile(path);
 }
 
 void LogFile::close() {
@@ -23,6 +24,12 @@ LogFile::LogFile(std::string path)
 	:
 	logpath(path),
 	log_stream(path) {
+
+	// try reopen
+	while (!log_stream.is_open()) {
+		std::this_thread::sleep_for(std::chrono::seconds(10));
+		log_stream.open(logpath, std::ios_base::out);
+	}
 	*this << "Started at " << time_str();
 }
 

@@ -14,14 +14,6 @@ int main(int argc, char* argv[]) {
 		}
 		auto log_path = "/tmp/web-log.txt";
 		sys::LogFile::init(log_path);
-
-		while (!sys::log().stream().is_open()) {
-			std::this_thread::sleep_for(std::chrono::seconds(10));
-			sys::LogFile::close();
-			sys::LogFile::init(log_path);
-		}
-
-
 		sys::System::create();
 
 		boost::asio::io_service io_service;
