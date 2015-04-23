@@ -19,16 +19,18 @@ session::session(server &s,
 session::~session() {}
 
 void session::end() {
-	sys::log() << "end session with " << socket().remote_endpoint().address().to_string() 
-			<< " (id: " << id << ")\n";
+	//sys::log() << "end session with " << socket().remote_endpoint().address().to_string() 
+	//		<< " (id: " << id << ")\n";
 
 	// clear list of messages to write
+	sys::log() << "Clear queue\n";
 	this->queue_lock.lock();
 	std::queue<std::string> empty;
 	std::swap(this->write_queue, empty);
 	this->queue_lock.unlock();
 
 	// end the write thread
+	sys::log() << "Stop thread\n";
 	this->state = session_state::stoping;
 	try {
 		this->write_thread.join();
@@ -38,10 +40,12 @@ void session::end() {
 	}
 
 	// close socket and shutdown
+	sys::log() << "Shutdown socket\n";
 	this->socket().cancel();
 	this->state = session_state::stopped;
 
 	// remove from servers list of active clients
+	sys::log() << "Remove\n";
 	this->create_server.end_session(this);
 }
 

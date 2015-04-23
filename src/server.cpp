@@ -34,10 +34,12 @@ void server::do_accept() {
 std::string server::status() {
 	std::string result;
 
+	session_lock.lock();
 	result += std::to_string(sessions.size()) + " sessions active\n\n";
 	for (auto &s : sessions) {
 		result += s->description() + "\n";
 	}
+	session_lock.unlock();
 	return result;
 }
 
