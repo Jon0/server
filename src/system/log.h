@@ -17,6 +17,8 @@ public:
 
 	std::string time_str();
 
+	std::string log_path() const;
+
 	template<class T>
 	LogFile &operator <<(const T &t) {
 		stream() << t;
@@ -30,6 +32,7 @@ public:
 
 private:
 	LogFile(std::string path);
+	std::string logpath;
 	std::ofstream log_stream;
 
 };

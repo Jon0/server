@@ -42,6 +42,11 @@ private:
 
 	CommandLine cl;
 
+	/**
+	 * parse output of system w command
+	 */
+	int w_idle_sec();
+
 };
 
 } // namespace sys

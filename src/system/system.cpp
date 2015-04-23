@@ -52,6 +52,7 @@ std::string System::html() {
 	str += smb.html();
 	str += "<br>";
 	str += "<h2>"+dir+"</h2>";
+	str += "<h2>"+log().log_path()+"</h2>";
 	str += "</body>";
 	str += "</html>";
 	return str;

@@ -20,6 +20,7 @@ void LogFile::close() {
 
 LogFile::LogFile(std::string path)
 	:
+	logpath(path),
 	log_stream(path) {
 	*this << "Started at " << time_str();
 }
@@ -34,6 +35,13 @@ std::string LogFile::time_str() {
 	auto now = std::chrono::system_clock::now();
 	auto now_c = std::chrono::system_clock::to_time_t(now);
 	return std::ctime(&now_c);
+}
+
+std::string LogFile::log_path() const {
+	if (!log_stream.is_open()) {
+		return logpath + " (failed open)";
+	}
+	return logpath;
 }
 
 LogFile &log() {
