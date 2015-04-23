@@ -12,12 +12,13 @@ int main(int argc, char* argv[]) {
 			std::cerr << "Usage: server <port>\n";
 			return 1;
 		}
-		sys::LogFile::init("/tmp/web-log.txt");
+		auto log_path = "/tmp/web-log.txt";
+		sys::LogFile::init(log_path);
 
 		while (!sys::log().stream().is_open()) {
 			std::this_thread::sleep_for(std::chrono::seconds(10));
 			sys::LogFile::close();
-			sys::LogFile::init("/tmp/web-log.txt");
+			sys::LogFile::init(log_path);
 		}
 
 
