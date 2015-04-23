@@ -15,8 +15,6 @@ public:
 	 */
 	std::ofstream &stream();
 
-	std::string time_str();
-
 	std::string log_path() const;
 
 	template<class T>
@@ -29,6 +27,7 @@ public:
 	static LogFile *instance;
 	static void init(std::string path);
 	static void close();
+	static std::string time_str();
 
 private:
 	LogFile(std::string path);

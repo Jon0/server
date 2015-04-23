@@ -23,12 +23,12 @@ void LogFile::close() {
 LogFile::LogFile(std::string path)
 	:
 	logpath(path),
-	log_stream(path) {
+	log_stream(path + time_str()) {
 
 	// try reopen
 	while (!log_stream.is_open()) {
 		std::this_thread::sleep_for(std::chrono::seconds(10));
-		log_stream.open(logpath, std::ios_base::out);
+		log_stream.open(logpath + time_str(), std::ios_base::out);
 	}
 	*this << "Started at " << time_str();
 }
