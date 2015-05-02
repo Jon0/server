@@ -14,10 +14,12 @@ void SambaMonitor::update() {
 	CommandLine cl;
 	auto smbstatus = cl.exec("smbstatus");
 	auto lines = io::split(smbstatus, '\n');
-	
+
 	int as = 0;
+	connections.clear();
 	for (int i = 3; lines[i].substr(0, 7) != "Service"; ++i) {
 		//std::cout << "Session: " << lines[i] << std::endl;
+		connections.push_back(lines[i]);
 		as++;
 	}
 	active = as;
@@ -32,6 +34,12 @@ std::string SambaMonitor::html() {
 	result += "<h1>";
 	result += std::to_string(active) + " samba connections";
 	result += "</h1>";
+	for (auto &l: connections) {
+		result += "<p>";
+		result += l;
+		result += "</p>";
+
+	}
 	return result;
 }
 

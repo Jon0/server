@@ -1,6 +1,8 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include <vector>
+
 namespace sys {
 
 class SambaMonitor {
@@ -15,6 +17,7 @@ public:
 
 private:
 	int active;
+	std::vector<std::string> connections;
 
 };
 

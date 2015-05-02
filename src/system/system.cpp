@@ -3,7 +3,7 @@
 
 namespace sys {
 
-System *System::instance = nullptr;	
+System *System::instance = nullptr;
 
 void System::create() {
 	if (instance) {
@@ -46,11 +46,11 @@ std::string System::html() {
 	str += "<form action=\"off\">";
 	str += "<input type=\"submit\" value=\"Turn off now\">";
 	str += "</form>";
-	str += "<br>";
+	str += "<hr>";
 	str += pwr.html();
-	str += "<br>";
+	str += "<hr>";
 	str += smb.html();
-	str += "<br>";
+	str += "<hr>";
 	str += "<h3>"+log().log_path()+"</h3>";
 	str += "</body>";
 	str += "</html>";
