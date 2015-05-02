@@ -35,7 +35,7 @@ public:
 	void shutdown();
 
 private:
-	std::chrono::time_point<std::chrono::system_clock> start;
+	std::chrono::time_point<std::chrono::system_clock> last_update;
 	int idle_sec;
 
 	std::unordered_map<std::string, int> activity;

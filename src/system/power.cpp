@@ -10,15 +10,16 @@ namespace sys {
 
 PowerCtrl::PowerCtrl() {
 	idle_sec = 0;
-	start = std::chrono::system_clock::now();
+	last_update = std::chrono::system_clock::now();
 }
 
 void PowerCtrl::update() {
 
-	// sec since startup is the maximum run time
-	std::chrono::duration<double> dur = std::chrono::system_clock::now() - start;
-	int sec_since_start = dur.count();
-	int new_idle_time = sec_since_start;
+	// sec since last update is the maximum idle time
+	auto now = std::chrono::system_clock::now();
+	std::chrono::duration<double> dur = now - last_update;
+	last_update = now;
+	int new_idle_time = idle_sec + dur.count();
 
 	// check w for activity
 	int w_idle = w_idle_sec();
@@ -72,7 +73,7 @@ std::string PowerCtrl::html() {
 	result += "<td>active users</td>";
 	result += "<td>idle time</td>";
 	result += "</tr>";
-	
+
 	for (auto u: activity) {
 		result += "<tr>";
 		result += "<td>"+u.first+"</td>";
