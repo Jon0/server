@@ -42,6 +42,11 @@ void PowerCtrl::update() {
 		new_idle_time = 0;
 	}
 
+	// check mythtv
+	if (System::get()->get_mythtv()->active_sessions() > 0) {
+		new_idle_time = 0;
+	}
+
 	idle_sec = new_idle_time;
 	if (idle_sec > idle_shutdown_seconds()) {
 		log() << "system shuting down now\n";
