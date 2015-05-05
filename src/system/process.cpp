@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 #include "../parser.h"
 #include "command.h"
