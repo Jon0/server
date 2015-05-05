@@ -54,8 +54,8 @@ void MythTvMonitor::update() {
 
 	int as = 0;
 	connections.clear();
-	for (int i = 6; lines[i].substr(0, 8) != "Schedule"; ++i) {
-		//std::cout << "Session: " << lines[i] << std::endl;
+	for (int i = 5; lines[i].substr(0, 8) != "Schedule" && i < lines.size(); ++i) {
+		std::cout << "Session: " << lines[i] << std::endl;
 		connections.push_back(lines[i]);
 		as++;
 	}
