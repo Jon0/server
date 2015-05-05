@@ -21,6 +21,23 @@ private:
 
 };
 
+
+class MythTvMonitor {
+public:
+	MythTvMonitor();
+
+	void update();
+
+	int active_sessions();
+
+	std::string html();
+
+private:
+	int active;
+	std::vector<std::string> connections;
+
+};
+
 } // namespace sys
 
 #endif

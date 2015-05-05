@@ -32,7 +32,44 @@ int SambaMonitor::active_sessions() {
 std::string SambaMonitor::html() {
 	std::string result;
 	result += "<h1>";
-	result += std::to_string(active) + " samba connections";
+	result += std::to_string(active) + " Samba connections";
+	result += "</h1>";
+	for (auto &l: connections) {
+		result += "<p>";
+		result += l;
+		result += "</p>";
+
+	}
+	return result;
+}
+
+MythTvMonitor::MythTvMonitor() {
+
+}
+
+void MythTvMonitor::update() {
+	CommandLine cl;
+	auto smbstatus = cl.exec("mythtv-status");
+	auto lines = io::split(smbstatus, '\n');
+
+	int as = 0;
+	connections.clear();
+	for (int i = 6; lines[i].substr(0, 8) != "Schedule"; ++i) {
+		//std::cout << "Session: " << lines[i] << std::endl;
+		connections.push_back(lines[i]);
+		as++;
+	}
+	active = as;
+}
+
+int MythTvMonitor::active_sessions() {
+	return active;
+}
+
+std::string MythTvMonitor::html() {
+	std::string result;
+	result += "<h1>";
+	result += std::to_string(active) + " MythTv connections";
 	result += "</h1>";
 	for (auto &l: connections) {
 		result += "<p>";

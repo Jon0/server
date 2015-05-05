@@ -18,6 +18,7 @@ public:
 	Config *get_config();
 	PowerCtrl *get_power_ctrl();
 	SambaMonitor *get_samba();
+	MythTvMonitor *get_mythtv();
 
 	/**
 	 * generate an html status page
@@ -33,6 +34,7 @@ private:
 
 	PowerCtrl pwr;
 	SambaMonitor smb;
+	MythTvMonitor mtv;
 
 	std::string dir;
 

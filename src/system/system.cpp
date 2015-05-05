@@ -29,6 +29,10 @@ SambaMonitor *System::get_samba() {
 	return &smb;
 }
 
+MythTvMonitor *System::get_mythtv() {
+	return &mtv;
+}
+
 std::string System::html() {
 	int idle_time = pwr.idle_seconds() / 60;
 	int shutdown_time = pwr.idle_shutdown_seconds() / 60;
@@ -51,6 +55,8 @@ std::string System::html() {
 	str += "<hr>";
 	str += smb.html();
 	str += "<hr>";
+	str += mtv.html();
+	str += "<hr>";
 	str += "<h3>"+log().log_path()+"</h3>";
 	str += "</body>";
 	str += "</html>";
@@ -69,6 +75,7 @@ System::System()
 		while (run) {
 			pwr.update();
 			smb.update();
+			mtv.update();
 			std::this_thread::sleep_for(std::chrono::seconds(10));
 		}
 	});
