@@ -1,5 +1,4 @@
 #include <vector>
-#include <iostream>
 
 #include "../parser.h"
 #include "command.h"
@@ -56,7 +55,7 @@ void MythTvMonitor::update() {
 	int as = 0;
 	connections.clear();
 	for (int i = 5; lines[i].substr(0, 8) != "Schedule" && i < lines.size(); ++i) {
-		std::cout << "Session: " << lines[i] << std::endl;
+		//std::cout << "Session: " << lines[i] << std::endl;
 		connections.push_back(lines[i]);
 		as++;
 	}
