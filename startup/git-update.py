@@ -3,10 +3,10 @@
 import sys, os, subprocess
 # save current dir
 start_path = ""
-if len(sys.argv) == 0:
-	start_path = subprocess.check_output(['pwd']).decode('ascii').split('\n')[0]
+if len(sys.argv) > 1:
+	start_path = sys.argv[1]
 else:
-	start_path = sys.argv[0]
+	start_path = subprocess.check_output(['pwd']).decode('ascii').split('\n')[0]
 
 # navigate to the src directory
 f = open('src_path', 'r')
