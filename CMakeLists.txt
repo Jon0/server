@@ -37,8 +37,9 @@ configure_file (
   "${PROJECT_BINARY_DIR}/src_path"
 )
 
-# copy update script
+# copy update scripts
 file( COPY "${PROJECT_SOURCE_DIR}/startup/git-update.py" DESTINATION "${PROJECT_BINARY_DIR}/")
+file( COPY "${PROJECT_SOURCE_DIR}/startup/run.py" DESTINATION "${PROJECT_BINARY_DIR}/")
 
 # copy config file
 file( COPY "${PROJECT_SOURCE_DIR}/content/config.txt" DESTINATION "${PROJECT_BINARY_DIR}/")
