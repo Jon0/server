@@ -31,5 +31,14 @@ add_definitions(-std=c++11)
 add_executable (ServerMain ${SRC_FILES})
 target_link_libraries (ServerMain ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
 
+# write src path to binary dir
+configure_file (
+  "${PROJECT_SOURCE_DIR}/startup/src_path.in"
+  "${PROJECT_BINARY_DIR}/src_path"
+)
+
+# copy update script
+file( COPY "${PROJECT_SOURCE_DIR}/startup/git-update.py" DESTINATION "${PROJECT_BINARY_DIR}/")
+
 # copy config file
 file( COPY "${PROJECT_SOURCE_DIR}/content/config.txt" DESTINATION "${PROJECT_BINARY_DIR}/")
