@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import os, subprocess
+import sys, os, subprocess
 # save current dir
 start_path = ""
 if len(sys.argv) == 0:
