@@ -73,10 +73,10 @@ System::System()
 	// start update thread
 	update_thread = std::thread([this] {
 		while (run) {
+			std::this_thread::sleep_for(std::chrono::seconds(10));
 			pwr.update();
 			smb.update();
 			mtv.update();
-			std::this_thread::sleep_for(std::chrono::seconds(10));
 		}
 	});
 }
