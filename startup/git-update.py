@@ -8,9 +8,12 @@ if len(sys.argv) > 1:
 else:
 	start_path = subprocess.check_output(['pwd']).decode('ascii').split('\n')[0]
 
-# navigate to the src directory
+# find the src path from a file called 'src_path'
+os.chdir(start_path)
 f = open('src_path', 'r')
 src_path = f.read().split('\n')[0]
+
+# navigate to the src directory
 os.chdir(src_path)
 
 # use git to pull updates
