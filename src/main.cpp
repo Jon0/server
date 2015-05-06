@@ -14,8 +14,11 @@ int main(int argc, char* argv[]) {
 		}
 		auto log_path = "/tmp/web-log";
 		sys::LogFile::init(log_path);
+
+		sys::log() << "create monitors\n";
 		sys::System::create();
 
+		sys::log() << "start web server\n";
 		boost::asio::io_service io_service;
 
 		// server with port and root web directory
