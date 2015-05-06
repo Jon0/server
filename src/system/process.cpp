@@ -49,7 +49,7 @@ MythTvMonitor::MythTvMonitor() {
 
 void MythTvMonitor::update() {
 	CommandLine cl;
-	auto smbstatus = ""; //cl.exec("mythtv-status");
+	auto smbstatus = cl.exec("mythtv-status");
 	auto lines = io::split(smbstatus, '\n');
 
 	int as = 0;
