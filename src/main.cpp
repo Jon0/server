@@ -12,6 +12,8 @@ int main(int argc, char* argv[]) {
 			std::cerr << "Usage: server <port>\n";
 			return 1;
 		}
+
+		// start the log file
 		auto log_path = "/tmp/web-log";
 		sys::LogFile::init(log_path);
 
