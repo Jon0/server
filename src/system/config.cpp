@@ -36,6 +36,10 @@ Config::Config(std::string path, std::string file)
 	log() << "Done\n";
 }
 
+bool Config::has(std::string key) {
+	return items.count(key) > 0;
+}
+
 std::string Config::get(std::string key) {
 	if (items.count(key) == 0) {
 		log() << "Config key not found: " << key << "\n";

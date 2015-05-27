@@ -9,7 +9,6 @@ void System::create() {
 	if (instance) {
 		return;
 	}
-	log() << "Starting system monitor\n";
 	instance = new System();
 }
 
