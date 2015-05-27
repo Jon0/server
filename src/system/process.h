@@ -16,6 +16,7 @@ public:
 	std::string html();
 
 private:
+	CommandLine cl;
 	int active;
 	std::vector<std::string> connections;
 
@@ -33,6 +34,7 @@ public:
 	std::string html();
 
 private:
+	CommandLine cl;
 	int active;
 	std::vector<std::string> connections;
 

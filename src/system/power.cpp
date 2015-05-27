@@ -15,7 +15,6 @@ PowerCtrl::PowerCtrl()
 }
 
 void PowerCtrl::update() {
-	std::cout << "update\n";
 
 	// sec since last update is the maximum idle time
 	auto now = std::chrono::system_clock::now();

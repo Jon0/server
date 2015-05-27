@@ -13,7 +13,6 @@ SambaMonitor::SambaMonitor() {
 
 void SambaMonitor::update() {
 	std::cout << "smdstatus\n";
-	CommandLine cl;
 	auto smbstatus = cl.exec("smbstatus");
 	auto lines = io::split(smbstatus, '\n');
 
@@ -51,7 +50,6 @@ MythTvMonitor::MythTvMonitor() {
 
 void MythTvMonitor::update() {
 	std::cout << "mstatus\n";
-	CommandLine cl;
 	auto smbstatus = cl.exec("mythtv-status");
 	auto lines = io::split(smbstatus, '\n');
 
