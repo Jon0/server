@@ -1,5 +1,6 @@
 // asio async server
 
+#include <iostream>
 #include <boost/asio.hpp>
 
 #include "system/log.h"
@@ -14,7 +15,7 @@ int main(int argc, char* argv[]) {
 		}
 
 		// start the log file
-		auto log_path = "/tmp/web-log";
+		auto log_path = "/tmp/web_log";
 		sys::LogFile::init(log_path);
 
 		sys::log() << "create monitors\n";

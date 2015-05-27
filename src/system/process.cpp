@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "../parser.h"
@@ -11,13 +12,14 @@ SambaMonitor::SambaMonitor() {
 }
 
 void SambaMonitor::update() {
+	std::cout << "smdstatus\n";
 	CommandLine cl;
 	auto smbstatus = cl.exec("smbstatus");
 	auto lines = io::split(smbstatus, '\n');
 
 	int as = 0;
 	connections.clear();
-	for (int i = 3; lines[i].substr(0, 7) != "Service"; ++i) {
+	for (int i = 3; i < lines.size() && lines[i].substr(0, 7) != "Service"; ++i) {
 		//std::cout << "Session: " << lines[i] << std::endl;
 		connections.push_back(lines[i]);
 		as++;
@@ -48,13 +50,14 @@ MythTvMonitor::MythTvMonitor() {
 }
 
 void MythTvMonitor::update() {
+	std::cout << "mstatus\n";
 	CommandLine cl;
 	auto smbstatus = cl.exec("mythtv-status");
 	auto lines = io::split(smbstatus, '\n');
 
 	int as = 0;
 	connections.clear();
-	for (int i = 5; lines[i].substr(0, 8) != "Schedule" && i < lines.size(); ++i) {
+	for (int i = 5; i < lines.size() && lines[i].substr(0, 8) != "Schedule"; ++i) {
 		//std::cout << "Session: " << lines[i] << std::endl;
 		connections.push_back(lines[i]);
 		as++;

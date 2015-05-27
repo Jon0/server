@@ -13,7 +13,7 @@ namespace sys {
 class Config {
 public:
 	Config();
-	Config(std::string filepath);
+	Config(std::string path, std::string file);
 
 	std::string get(std::string key);
 	void set(std::string key, std::string value);

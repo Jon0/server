@@ -8,12 +8,14 @@
 
 namespace sys {
 
-PowerCtrl::PowerCtrl() {
-	idle_sec = 0;
-	last_update = std::chrono::system_clock::now();
+PowerCtrl::PowerCtrl()
+	:
+	idle_sec(0),
+	last_update(std::chrono::system_clock::now()) {
 }
 
 void PowerCtrl::update() {
+	std::cout << "update\n";
 
 	// sec since last update is the maximum idle time
 	auto now = std::chrono::system_clock::now();
@@ -21,20 +23,16 @@ void PowerCtrl::update() {
 	last_update = now;
 	int new_idle_time = idle_sec + dur.count();
 
+
 	// check w for activity
-	int w_idle = w_idle_sec();
-	if (w_idle < new_idle_time) {
-		new_idle_time = w_idle;
-	}
+	new_idle_time = std::min(new_idle_time, w_idle_sec());
 
 	// look for x activity too
 	auto xidle = cl.exec("xprintidle");
-	if (isdigit(xidle[0])) {
+	if (xidle.length() > 0 && isdigit(xidle[0])) {
 		int sum_time = stoi(xidle) / 1000;
 		activity["xwindow"] = sum_time;
-		if (sum_time < new_idle_time) {
-			new_idle_time = sum_time;
-		}
+		new_idle_time = std::min(new_idle_time, sum_time);
 	}
 
 	// check samba

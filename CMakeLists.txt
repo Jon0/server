@@ -42,4 +42,4 @@ file( COPY "${PROJECT_SOURCE_DIR}/startup/git-update.py" DESTINATION "${PROJECT_
 file( COPY "${PROJECT_SOURCE_DIR}/startup/run.py" DESTINATION "${PROJECT_BINARY_DIR}/")
 
 # copy config file
-file( COPY "${PROJECT_SOURCE_DIR}/content/config.txt" DESTINATION "${PROJECT_BINARY_DIR}/")
+file( COPY "${PROJECT_SOURCE_DIR}/content/web_pw.conf" DESTINATION "${PROJECT_BINARY_DIR}/")

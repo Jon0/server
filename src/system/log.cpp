@@ -22,7 +22,7 @@ void LogFile::close() {
 
 LogFile::LogFile(std::string path)
 	:
-	logpath(path + time_str()),
+	logpath(path + "_" + time_str()),
 	log_stream(logpath) {
 
 	// try reopen

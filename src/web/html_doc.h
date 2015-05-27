@@ -8,6 +8,7 @@ class HtmlDoc {
 public:
 	HtmlDoc() {}
 
+
 };
 
 #endif
