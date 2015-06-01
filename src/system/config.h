@@ -15,6 +15,8 @@ public:
 	Config();
 	Config(std::string path, std::string file);
 
+	std::string filepath() const;
+
 	/**
 	 * does the given key have a value
 	 */
@@ -31,7 +33,7 @@ public:
 	void set(std::string key, std::string value);
 
 private:
-	std::string path;
+	std::string fullpath;
 	std::unordered_map<std::string, std::string> items;
 
 	void update_file();

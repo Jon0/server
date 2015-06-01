@@ -14,17 +14,20 @@ Config::Config()
 
 Config::Config(std::string path, std::string file)
 	:
-	path(path + file) {
+	fullpath(path + file) {
 
 	// read config file pairs
-	std::ifstream config(path);
+	std::ifstream config(fullpath);
 	if (!config.is_open()) {
 		log() << "Config file not found: " << path << "\n";
-		config.open(file);
+
+		// try the file in the current directory
+		fullpath = file;
+		config.open(fullpath);
 	}
 
 
-	log() << "Read config file " << path << "\n";
+	log() << "Read config file " << fullpath << "\n";
 	std::string line;
 	while (std::getline(config, line)) {
 		auto parts = io::split(line, ':');
@@ -34,6 +37,10 @@ Config::Config(std::string path, std::string file)
 		}
 	}
 	log() << "Done\n";
+}
+
+std::string Config::filepath() const {
+	return fullpath;
 }
 
 bool Config::has(std::string key) {
@@ -57,7 +64,7 @@ void Config::update_file() {
 
 	// update config file
 	log() << "Updating config file\n";
-	std::ofstream config(path);
+	std::ofstream config(fullpath);
 	if (config.is_open()) {
 		for (auto kv: items) {
 			config << kv.first << ":" << kv.second << "\n";

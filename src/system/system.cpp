@@ -57,6 +57,7 @@ std::string System::html() {
 	str += mtv.html();
 	str += "<hr>";
 	str += "<h3>"+log().log_path()+"</h3>";
+	str += "<h3>"+get_config()->filepath()+"</h3>";
 	str += "</body>";
 	str += "</html>";
 	return str;
