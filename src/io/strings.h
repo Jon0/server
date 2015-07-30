@@ -1,10 +1,8 @@
-#ifndef PARSER_H
-#define PARSER_H
+#pragma once
 
+#include <iterator>
 #include <string>
 #include <vector>
-
-#include "http.h"
 
 namespace io {
 
@@ -19,10 +17,8 @@ int parse_int(const std::string &str, int default_value=0);
 std::vector<std::string> split(const std::string &str, char delim);
 
 /**
- * parsing an http request header and data
+ * read a whole file into a string
  */
-http::request parse_request(const char *request_data, int length);
+std::string read_file(const std::string &filename);
 
 } // namespace io
-
-#endif

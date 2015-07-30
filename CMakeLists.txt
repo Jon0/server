@@ -2,8 +2,8 @@ cmake_minimum_required (VERSION 2.6)
 
 project (Server)
 
-set (Test_VERSION_MAJOR 0)
-set (Test_VERSION_MINOR 0)
+set(Test_VERSION_MAJOR 0)
+set(Test_VERSION_MINOR 0)
 
 # std threads
 find_package(Threads REQUIRED)
@@ -12,24 +12,23 @@ find_package(Threads REQUIRED)
 find_package(OpenSSL REQUIRED)
 
 # find boost libraries
-set (Boost_USE_STATIC_LIBS ON)
-set (Boost_MULTITHREADED ON)
-set (Boost_USE_STATIC_RUNTIME OFF)
+set(Boost_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost COMPONENTS system date_time filesystem iostreams REQUIRED)
 
 # additional includes
 include_directories(${OPENSSL_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
 
-set(CPP_PATH "src")
+#build server library
+set(MAIN_LIBRARY_NAME "server")
+add_subdirectory(src)
+include_directories("${PROJECT_SOURCE_DIR}/src")
 
-file(GLOB SRC_FILES
-	"${CPP_PATH}/*.cpp"
-	"${CPP_PATH}/system/*.cpp"
-)
+# build main executable
+add_subdirectory(main)
 
-add_definitions(-std=c++11)
-add_executable (ServerMain ${SRC_FILES})
-target_link_libraries (ServerMain ${CMAKE_THREAD_LIBS_INIT} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES})
+#build test executable
+add_subdirectory(test)
 
 # write src path to binary dir
 configure_file (
@@ -38,8 +37,8 @@ configure_file (
 )
 
 # copy update scripts
-file( COPY "${PROJECT_SOURCE_DIR}/startup/git-update.py" DESTINATION "${PROJECT_BINARY_DIR}/")
-file( COPY "${PROJECT_SOURCE_DIR}/startup/run.py" DESTINATION "${PROJECT_BINARY_DIR}/")
+file(COPY "${PROJECT_SOURCE_DIR}/startup/git-update.py" DESTINATION "${PROJECT_BINARY_DIR}/")
+file(COPY "${PROJECT_SOURCE_DIR}/startup/run.py" DESTINATION "${PROJECT_BINARY_DIR}/")
 
 # copy config file
-file( COPY "${PROJECT_SOURCE_DIR}/content/web_pw.conf" DESTINATION "${PROJECT_BINARY_DIR}/")
+file(COPY "${PROJECT_SOURCE_DIR}/content/web_pw.conf" DESTINATION "${PROJECT_BINARY_DIR}/")

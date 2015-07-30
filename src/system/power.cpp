@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../parser.h"
+#include "../io/strings.h"
 #include "log.h"
 #include "power.h"
 #include "system.h"

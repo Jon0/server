@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "../parser.h"
+#include "../io/strings.h"
 #include "log.h"
 #include "config.h"
 
