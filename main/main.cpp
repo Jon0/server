@@ -21,8 +21,8 @@ int main(int argc, char* argv[]) {
 		auto log_path = "/tmp/web_log";
 		sys::LogFile::init(log_path);
 
-		//sys::log() << "create monitors\n";
-		//sys::System::create();
+		sys::log() << "create monitors\n";
+		sys::System::create();
 
 
 		sys::log() << "start web server\n";
@@ -31,19 +31,19 @@ int main(int argc, char* argv[]) {
 		http::routes routes(content_path);
 
 		// a page template
-		std::string index_path = content_path + "/index.html";
-		io::tmpl tmpl(io::read_file(index_path));
+		io::tmpl index_tmpl(io::read_file(content_path + "/index.html"));
+		io::tmpl sys_tmpl(io::read_file(content_path + "/system.html"));
 
 		// status object
-		os::status s;
-		os::directory dir("/dev");
+		type::node test("test");
 
 		// the routes to use
-		routes.add_routes("/index.html", [&tmpl, &dir](const http::route_args_t &, const http::request &request) {
-			return http::static_content(tmpl.render(dir), "text/html");
+		routes.add_routes("/index.html", [&index_tmpl, &test](const http::route_args_t &, const http::request &request) {
+			return http::static_content(index_tmpl.render(test), "text/html");
 		});
-		routes.add_routes("/test.html", [](const http::route_args_t &, const http::request &request) {
-			return http::static_content(sys::System::get()->html(), "text/html");
+		routes.add_routes("/system.html", [&sys_tmpl](const http::route_args_t &, const http::request &request) {
+			auto sys = sys::System::get();
+			return http::static_content(sys_tmpl.render(sys->make_node()), "text/html");
 		});
 		routes.add_routes("/idletime", [](const http::route_args_t &, const http::request &request) {
 			int new_sec = stoi(request.data.at("minutes")) * 60;

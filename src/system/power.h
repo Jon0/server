@@ -5,21 +5,24 @@
 #include <string>
 #include <unordered_map>
 
-#include "command.h"
+#include "../linux/command.h"
+#include "service.h"
 
 namespace sys {
 
-class PowerCtrl {
+class PowerCtrl : public service {
 public:
 	PowerCtrl();
 
-	void update();
+	bool available() const override;
+
+	void update() override;
 
 	/**
 	 * seconds all users have been idle for
 	 */
-	int idle_seconds();
-	int idle_shutdown_seconds();
+	int idle_seconds() const;
+	int idle_shutdown_seconds() const;
 
 
 	/**
@@ -27,7 +30,7 @@ public:
 	 */
 	void set_idle_seconds(int s);
 
-	std::string html();
+	std::string html() const;
 
 	/**
 	 * turns off the machine

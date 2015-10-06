@@ -33,7 +33,6 @@ Config::Config(std::string path, std::string file)
 		auto parts = io::split(line, ':');
 		if (parts.size() == 2) {
 			items[parts[0]] = parts[1];
-			std::cout << parts[0] << " = " << parts[1] << std::endl;
 		}
 	}
 	log() << "Done\n";

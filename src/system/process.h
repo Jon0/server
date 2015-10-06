@@ -1,45 +1,46 @@
-#ifndef PROCESS_H
-#define PROCESS_H
+#pragma once
 
 #include <vector>
 
+#include "service.h"
+
 namespace sys {
 
-class SambaMonitor {
+class SambaMonitor : public service {
 public:
 	SambaMonitor();
 
-	void update();
+	bool available() const override;
+
+	void update() override;
 
 	int active_sessions();
 
-	std::string html();
+	std::string html() const;
 
 private:
-	CommandLine cl;
 	int active;
 	std::vector<std::string> connections;
 
 };
 
 
-class MythTvMonitor {
+class MythTvMonitor : public service {
 public:
 	MythTvMonitor();
 
-	void update();
+	bool available() const override;
+
+	void update() override;
 
 	int active_sessions();
 
-	std::string html();
+	std::string html() const;
 
 private:
-	CommandLine cl;
 	int active;
 	std::vector<std::string> connections;
 
 };
 
 } // namespace sys
-
-#endif

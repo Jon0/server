@@ -29,8 +29,8 @@ public:
 		return std::to_string(tv.get<T>());
 	}
 
-	value<T> create(const T &initial) {
-		return value<T>(initial);
+	value_owned<T> create(const T &initial) {
+		return value_owned<T>(initial);
 	}
 
 	void set(value_base &changed, const value_base &value) const override {
@@ -54,7 +54,8 @@ public:
 		// functions
 		func("add", [](value_base &modify, const val_list &args) {
 			for (auto other : args) {
-				modify.set<int>(modify.get<int>() + other->get<int>());
+				// TODO type of other may be different
+				modify.set<int>(modify.get<int>() + other->get_value<int>());
 			}
 			return true;
 		});
@@ -69,8 +70,8 @@ public:
 		return std::to_string(tv.get<internal_type>());
 	}
 
-	value<internal_type> create(const internal_type &initial) {
-		return value<internal_type>(initial);
+	value_owned<internal_type> create(const internal_type &initial) {
+		return value_owned<internal_type>(initial);
 	}
 
 	void set(value_base &changed, const value_base &value) const override {
@@ -102,8 +103,8 @@ public:
 		return tv.get<internal_type>();
 	}
 
-	value<internal_type> create(const internal_type &initial) {
-		return value<internal_type>(initial);
+	value_owned<internal_type> create(const internal_type &initial) {
+		return value_owned<internal_type>(initial);
 	}
 
 	void set(value_base &changed, const value_base &value) const override {
@@ -147,8 +148,8 @@ public:
 		return result;
 	}
 
-	value<list_type> create(const list_type &initial) {
-		return value<list_type>(initial);
+	value_owned<list_type> create(const list_type &initial) {
+		return value_owned<list_type>(initial);
 	}
 
 	void set(value_base &changed, const value_base &value) const override {
@@ -200,8 +201,8 @@ public:
 		return result;
 	}
 
-	value<internal_type> create(const internal_type &initial) {
-		return value<internal_type>(initial);
+	value_owned<internal_type> create(const internal_type &initial) {
+		return value_owned<internal_type>(initial);
 	}
 
 	void set(value_base &changed, const value_base &value) const override {

@@ -1,13 +1,27 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#pragma once
 
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-enum class command {
+
+enum class cmd_name {
 	shutdown
 };
+
+
+template<cmd_name cmd>
+struct command;
+
+template<>
+struct command<cmd_name::shutdown> {
+	int call(int time) {
+		// TODO
+	}
+};
+
+
+
 
 class CommandLine {
 public:
@@ -29,5 +43,3 @@ private:
 	std::string get_output(std::string cmd);
 
 };
-
-#endif

@@ -2,8 +2,9 @@
 #include <vector>
 
 #include "../io/strings.h"
-#include "command.h"
+#include "../linux/command.h"
 #include "process.h"
+#include "system.h"
 
 namespace sys {
 
@@ -11,9 +12,13 @@ SambaMonitor::SambaMonitor() {
 
 }
 
+bool SambaMonitor::available() const {
+	return System::get()->cl.has_command("smbstatus");
+}
+
 void SambaMonitor::update() {
 	std::cout << "smdstatus\n";
-	auto smbstatus = cl.exec("smbstatus");
+	auto smbstatus = System::get()->cl.exec("smbstatus");
 	auto lines = io::split(smbstatus, '\n');
 
 	int as = 0;
@@ -30,7 +35,7 @@ int SambaMonitor::active_sessions() {
 	return active;
 }
 
-std::string SambaMonitor::html() {
+std::string SambaMonitor::html() const {
 	std::string result;
 	result += "<h1>";
 	result += std::to_string(active) + " Samba connections";
@@ -48,9 +53,13 @@ MythTvMonitor::MythTvMonitor() {
 
 }
 
+bool MythTvMonitor::available() const {
+	return System::get()->cl.has_command("mythtv-status");
+}
+
 void MythTvMonitor::update() {
 	std::cout << "mstatus\n";
-	auto smbstatus = cl.exec("mythtv-status");
+	auto smbstatus = System::get()->cl.exec("mythtv-status");
 	auto lines = io::split(smbstatus, '\n');
 
 	int as = 0;
@@ -67,7 +76,7 @@ int MythTvMonitor::active_sessions() {
 	return active;
 }
 
-std::string MythTvMonitor::html() {
+std::string MythTvMonitor::html() const {
 	std::string result;
 	result += "<h1>";
 	result += std::to_string(active) + " MythTv connections";

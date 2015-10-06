@@ -5,7 +5,6 @@
 bool CommandLine::has_command(const std::string &cmd_name) {
 	auto ac = available.find(cmd_name);
 	if (ac == available.end()) {
-		std::cout << cmd_name << " check\n";
 
 		// command has not been previously used
 		auto r = get_output("which "+cmd_name);
@@ -14,9 +13,6 @@ bool CommandLine::has_command(const std::string &cmd_name) {
 
 		if (!has_cmd) {
 			std::cout << "command " << cmd_name << " not available\n";
-		}
-		else {
-			std::cout << cmd_name << " @ " << r << "\n";
 		}
 		return has_cmd;
 	}

@@ -25,28 +25,62 @@ public:
 };
 
 
+/**
+ * base templated type
+ */
 template<class T>
 class value : public value_base {
 public:
-	value(const T &initial_value)
+	virtual ~value() {}
+
+	virtual const T &get() const = 0;
+
+	virtual T &access() = 0;
+
+	void set(const T &v) {
+		access() = v;
+	}
+};
+
+
+template<class T>
+class value_owned : public value<T> {
+public:
+	value_owned(const T &initial_value)
 		:
 		stored_value(initial_value) {}
 
+	const T &get() const override {
+		return stored_value;
+	}
 
-    const T &get() const {
-    	return stored_value;
-    }
-
-    void set(const T &v) {
-    	stored_value = v;
-    }
-
-    T &access() {
-    	return stored_value;
-    }
+	T &access() override {
+		return stored_value;
+	}
 
 private:
 	T stored_value;
+
+};
+
+
+template<class T>
+class value_shared : public value<T> {
+public:
+	value_shared(const T &initial_value)
+		:
+		value<T>(initial_value) {}
+
+	const T &get() const override {
+		return *stored_ptr;
+	}
+
+	T &access() override {
+		return *stored_ptr;
+	}
+
+private:
+	std::shared_ptr<T> stored_ptr;
 
 };
 

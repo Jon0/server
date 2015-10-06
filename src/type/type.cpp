@@ -39,11 +39,17 @@ bool type_base::execute(const std::string &name, value_base &modify, const val_l
 	return false;
 }
 
-typed_value::typed_value(const type_base &ty, value_base &val)
+
+typed_value::typed_value(const typed_value &tv)
 	:
-	type{ty},
-	var{&val}
-	{}
+	type(tv.type),
+	var(tv.var) {}
+
+
+typed_value::typed_value(const type_base &ty, std::shared_ptr<value_base> val)
+	:
+	type(ty),
+	var(val) {}
 
 
 bool typed_value::operator ==(const typed_value &other) const {

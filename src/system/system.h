@@ -3,6 +3,7 @@
 
 #include <thread>
 
+#include "../type/var.h"
 #include "config.h"
 #include "power.h"
 #include "process.h"
@@ -15,19 +16,22 @@ public:
 	static void create();
 	static System *get();
 
+
+	CommandLine cl;
 	Config *get_config();
 	PowerCtrl *get_power_ctrl();
 	SambaMonitor *get_samba();
 	MythTvMonitor *get_mythtv();
 
-	/**
-	 * generate an html status page
-	 */
-	std::string html();
+	type::node make_node() const;
 
 private:
 	System();
 	~System();
+
+	void logmsg(const std::string &msg) const;
+
+	void update();
 
 	// initialise config
 	Config conf;

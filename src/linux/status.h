@@ -2,17 +2,11 @@
 
 #include <string>
 
-#include "../type/var.h"
-
 namespace os {
 
-class status : public type::node {
+class status {
 public:
 	status();
-
-private:
-	type::var<int> pid;
-	type::var<std::string> login;
 
 };
 

@@ -14,6 +14,10 @@ PowerCtrl::PowerCtrl()
 	last_update(std::chrono::system_clock::now()) {
 }
 
+bool PowerCtrl::available() const {
+	return true;
+}
+
 void PowerCtrl::update() {
 
 	// sec since last update is the maximum idle time
@@ -51,11 +55,11 @@ void PowerCtrl::update() {
 	}
 }
 
-int PowerCtrl::idle_seconds() {
+int PowerCtrl::idle_seconds() const {
 	return idle_sec;
 }
 
-int PowerCtrl::idle_shutdown_seconds() {
+int PowerCtrl::idle_shutdown_seconds() const {
 	auto str_sec = System::get()->get_config()->get("idle_timer_sec");
 	int idle_shutdown_sec = io::parse_int(str_sec);
 	if (idle_shutdown_sec < 300) {
@@ -68,7 +72,7 @@ void PowerCtrl::set_idle_seconds(int s) {
 	System::get()->get_config()->set("idle_timer_sec", std::to_string(s));
 }
 
-std::string PowerCtrl::html() {
+std::string PowerCtrl::html() const {
 	std::string result;
 	result += "<table>";
 	result += "<tr>";

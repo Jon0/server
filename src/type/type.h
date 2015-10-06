@@ -6,96 +6,27 @@
 #include <unordered_map>
 #include <vector>
 
-#include "value.h"
+#include "base.h"
 
 namespace type {
-
-class typed_value;
-
-template<class T>
-class atomic;
-
-
-/**
- * a possible function implementation
- */
-template<class T>
-class mod {
-
-};
-
-using val_list = std::vector<const value_base *>;
-using type_func = std::function<bool(value_base &modify, const val_list &args)>;
-
-
-class func {
-public:
-	func(const std::string &name, const type_func f);
-
-	/**
-	 * pass mouse position
-	 */
-	bool execute(value_base &modify, const val_list &args);
-
-	/**
-	 * name of this action
-	 */
-	const std::string name;
-
-private:
-	const type_func to_exec;
-
-};
-
-
-/**
- * a runtime type
- */
-class type_base {
-public:
-	type_base(const std::string &name);
-	virtual ~type_base() {}
-
-	/**
-	 * check equality
-	 */
-	bool operator ==(const type_base &other) const;
-	bool operator !=(const type_base &other) const;
-
-	/**
-	 * runs a templated function
-	 * using the internal type
-	 */
-	virtual void tmpl(const value_base &tv) const = 0;
-
-	virtual std::string str_value(const value_base &tv) const = 0;
-
-	virtual void set(value_base &changed, const value_base &value) const = 0;
-
-	void func(const std::string &name, const type_func &f);
-
-	bool execute(const std::string &name, value_base &modify, const val_list &args);
-
-	const std::string name;
-
-private:
-
-	// list available functions for interaction
-	std::unordered_map<std::string, type_func> functions;
-
-};
-
 
 /**
  * stores a type and value
  */
 class typed_value {
 public:
+	typed_value(const typed_value &tv);
 
 	// create a new typed value
 	template<class T>
-	static typed_value create(value<T> &initial) {
-		return typed_value(*atomic<T>::get(), initial);
+	static typed_value create(const value_shared<T> &initial) {
+		return typed_value(*atomic<T>::get(), std::make_shared<value_shared<T>>(initial));
+	}
+
+	// create a new typed value
+	template<class T>
+	static typed_value create(const T &initial) {
+		return typed_value(*atomic<T>::get(), std::make_shared<value_owned<T>>(initial));
 	}
 
 	/**
@@ -121,10 +52,12 @@ public:
 		return var->get<T>();
 	}
 
+	typed_value func(const std::string &fname, const val_list &args);
+
 	const type_base &type;
 
 private:
-	typed_value(const type_base &ty, value_base &val);
+	typed_value(const type_base &ty, std::shared_ptr<value_base> val);
 
 	/**
 	 * set the value
@@ -142,8 +75,7 @@ private:
 		}
 	}
 
-	value_base *var;
-
+	std::shared_ptr<value_base> var;
 };
 
 /**
