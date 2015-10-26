@@ -9,7 +9,7 @@
 namespace http {
 
 using route_args_t = std::vector<std::string>;
-using content_func_t = std::function<http::content(const route_args_t &, const request &request)>;
+using content_func_t = std::function<http::content(const request &)>;
 using notify_func_t = std::function<void(const request &)>;
 
 /**
@@ -22,25 +22,32 @@ const std::unordered_map<std::string, std::string> ext_type = {
 	{"frag", "text/plain"}
 };
 
-class route {
+class route_tree {
 public:
-	route(const std::string &s);
+	using regex_type = std::string;
+	using split_type = std::vector<regex_type>;
+	using value_type = std::pair<regex_type, std::shared_ptr<route_tree>>;
 
-	std::string get_type() const;
+	route_tree();
 
-	bool match(const std::string &s, route_args_t &args) const;
+	void insert(const split_type &nodes, content_func_t ct);
+
+	content_func_t match(const split_type &nodes);
+
+	std::shared_ptr<route_tree> make_node(const regex_type &str);
 
 private:
-	route_args_t components;
-
+	content_func_t content;
+	std::vector<value_type> next;
 };
 
+
 /**
- * TODO routes matched by regex
+ * routes matched by regex
  */
 class routes {
 public:
-	routes(const std::string &root);
+	routes();
 
 	response get_response(const request &request) const;
 
@@ -51,23 +58,10 @@ public:
 	 */
 	void add_routes(const std::string &uri, content_func_t ct);
 
-	/**
-	 * serve a single content object
-	 */
-	void add_location(const std::string &uri, content *ct);
-
 	void add_notify_func(const std::string &uri, notify_func_t func);
 
 private:
-	std::string web_root;
-	std::unordered_map<std::string, std::string> alias;
-
-	// dynamic locations matched with regex
-	// this is less optimised
-	std::vector<std::pair<route, content_func_t>> dynamic_routes;
-
-	// routes which return content
-	std::unordered_map<std::string, http::content *> static_routes;
+	std::shared_ptr<route_tree> root;
 
 	// routes which notify
 	std::unordered_map<std::string, notify_func_t> notify;

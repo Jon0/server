@@ -11,13 +11,8 @@ find_package(Threads REQUIRED)
 # ssl
 find_package(OpenSSL REQUIRED)
 
-# find boost libraries
-set(Boost_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost COMPONENTS system date_time filesystem iostreams REQUIRED)
-
 # additional includes
-include_directories(${OPENSSL_INCLUDE_DIR} ${Boost_INCLUDE_DIRS})
+include_directories(${OPENSSL_INCLUDE_DIR})
 
 #build server library
 set(MAIN_LIBRARY_NAME "server")

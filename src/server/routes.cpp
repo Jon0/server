@@ -6,58 +6,56 @@
 
 namespace http {
 
-route::route(const std::string &s) {
-	for (auto &c : io::split(s, '/')) {
-		components.push_back(c);
+route_tree::route_tree() {}
+
+void route_tree::insert(const split_type &nodes, content_func_t ct) {
+	if (nodes.empty()) {
+		content = ct;
+		return;
 	}
+	auto next_node = make_node(nodes.front());
+	auto subset = split_type(nodes.begin() + 1, nodes.end());
+	next_node->insert(subset, ct);
 }
 
-std::string route::get_type() const {
-	auto parts = io::split(components.back(), '.');
-	if (parts.size() == 2 && ext_type.count(parts[1]) > 0) {
-		return ext_type.at(parts[1]);
+content_func_t route_tree::match(const split_type &nodes) {
+	if (nodes.empty()) {
+		return content;
 	}
-
-	// default type;
-	return "text/html";
-}
-
-bool route::match(const std::string &s, route_args_t &args) const {
-	auto other = io::split(s, '/');
-
-	// must be the same length
-	if (components.size() != other.size()) {
-		return false;
-	}
-
-	// match each component
-	for (int i = 0; i < components.size(); ++i) {
-		const std::string &c = components[i];
-		const std::string &o = other[i];
-		if (c == "*") {
-			args.push_back(o);
-		}
-		else if (c != o) {
-			return false;
+	for (auto &r : next) {
+		try {
+			if (std::regex_match(nodes.front(), std::regex(r.first))) {
+				auto subset = split_type(nodes.begin() + 1, nodes.end());
+				auto branch = r.second->match(subset);
+				if (branch) {
+					return branch;
+				}
+			}
+		} catch(std::regex_error const &e) {
+			std::cout << e.what() << "\n";
 		}
 	}
-	return true;
+	//std::cout << "could not match " << nodes.front() << "\n";
+	return nullptr;
 }
 
-routes::routes(const std::string &root)
+std::shared_ptr<route_tree> route_tree::make_node(const regex_type &str) {
+	for (auto &pair : next) {
+		if (str == pair.first) {
+			return pair.second;
+		}
+	}
+	std::shared_ptr<route_tree> new_route = std::make_shared<route_tree>();
+	next.emplace_back(std::make_pair(str, new_route));
+	return new_route;
+}
+
+routes::routes()
 	:
-	web_root(root),
-	alias({{"/", "/index.html"}}) {
-}
+	root(std::make_shared<route_tree>()) {}
 
 response routes::get_response(const request &request) const {
-	std::string uri;
-	if (alias.count(request.location) > 0) {
-		uri = alias.at(request.location);
-	}
-	else {
-		uri = request.location;
-	}
+	std::string uri = request.location;
 
 	// respond to notifiers if available
 	bool do_notify = (notify.count(uri) > 0);
@@ -65,36 +63,21 @@ response routes::get_response(const request &request) const {
 		notify.at(uri)(request);
 	}
 
-	// return static mapped content
-	if (static_routes.count(uri) > 0) {
-		return response(*static_routes.at(uri));
+	// return content
+	auto content = root->match(request.split);
+	if (content) {
+		return response(request, content(request));
 	}
 
-	// return dynamic content as a lower priority
-	for (auto &r : dynamic_routes) {
-		route_args_t args;
-		if (r.first.match(uri, args)) {
-			return response(r.second(args, request));
-		}
-	}
-
-	// try read the files
-	std::string full_path = web_root + uri;
-	std::cout << "reading file " << full_path << "\n";
-	std::string file = io::read_file(full_path);
-	if (!file.empty()) {
-		static_content content(file, get_type(uri));
-		return response(content);
-	}
-	else if (do_notify) {
+	if (do_notify) {
 
 		// notify routes will not 404
 		// but instead return default response
 		static_content content("OK", "text/plain");
-		return response(content);
+		return response(request, content);
 	}
 	else {
-		return response(404);
+		return response(request, 404);
 	}
 }
 
@@ -113,15 +96,10 @@ std::string routes::get_type(const std::string &filename) const {
 }
 
 void routes::add_routes(const std::string &uri, content_func_t ct) {
-	dynamic_routes.emplace_back(std::make_pair(route(uri), ct));
-}
-
-void routes::add_location(const std::string &uri, content *ct) {
-	static_routes.emplace(std::make_pair(uri, ct));
+	root->insert(io::split(uri, '/'), ct);
 }
 
 void routes::add_notify_func(const std::string &uri, notify_func_t func) {
 	notify.emplace(std::make_pair(uri, func));
 }
-
 }

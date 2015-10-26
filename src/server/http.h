@@ -59,6 +59,9 @@ public:
 	// additional variables
 	str_map data;
 
+	// split request content
+	std::vector<std::string> split;
+
 	// unparsed request for debug
 	std::string raw_request;
 
@@ -85,13 +88,13 @@ private:
  */
 class response {
 public:
-	response(unsigned short code);
+	response(const request &req, unsigned short code);
 
 	/**
 	 * Makes a single pull() on content
 	 * callbacks are setup if content is a stream
 	 */
-	response(const content &c);
+	response(const request &req, const content &c);
 	~response();
 
 	std::string header() const;

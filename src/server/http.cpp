@@ -13,7 +13,8 @@ header::header() {
 request::request(request_type t, std::string l)
 	:
 	type(t),
-	location(l) {
+	location(l),
+	split(io::split(location, '/')) {
 }
 
 std::string request::info() const {
@@ -38,13 +39,13 @@ response_connector::~response_connector() {
 	connected_content.disconnect(source_request);
 }
 
-response::response(unsigned short code)
+response::response(const request &req, unsigned short code)
 	:
 	response_code(code),
 	ct("") {
 }
 
-response::response(const content &c)
+response::response(const request &req, const content &c)
 	:
 	response_code(200),
 	ct(c),
